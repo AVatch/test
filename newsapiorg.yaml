@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  title: News Api
+  description: Search for recent & breaking news.
+  version: "v2"
+servers:
+  - url: https://newsapi.org
+paths:
+  /v2/everything:
+    get:
+      operationId: search
+      summary: Search for news articles that mention a specific topic or keyword.
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: Keywords or phrases to search for in the article title and body.
+        - in: query
+          name: from
+          schema:
+            type: string
+          description: A date and optional time for the oldest article allowed. This should be in ISO 8601 format (e.g. 2024-01-27 or 2024-01-27T15:13:22)
+        - in: query
+          name: to
+          schema:
+            type: string
+          description: A date and optional time for the newest article allowed. This should be in ISO 8601 format (e.g. 2024-01-27 or 2024-01-27T15:13:22)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/everythingResponse"
+components:
+  schemas:
+    everythingResponse:
+      type: object
+      properties:
+        articles:
+          type: object
+          properties:
+            source:
+              type: object
+              description: The identifier id and a display name name for the source this article came from.
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+            author:
+              type: string
+              description: The author of the article
+            title:
+              type: string
+              description: The headline or title of the article.
+            description:
+              type: string
+              description: A description or snippet from the article.
+            url:
+              type: string
+              description: The direct URL to the article.
+            urlToImage:
+              type: string
+              description: The URL to a relevant image for the article.
+            publishedAt:
+              type: string
+              description: The date and time that the article was published, in UTC (+000)
+            content:
+              type: string
+              description: The unformatted content of the article, where available. This is truncated to 200 chars.
